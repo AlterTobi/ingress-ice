@@ -2,13 +2,13 @@
 
 # ingress-ice start script by Nikitakun
 # Launch this script from console ( $ chmod +x ingress-ice&&./ingress-ice )
-FILE="$HOME/.ingress-ice.conf"
+FILE="./.ingress-ice.conf"
 
 SCRIPT_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 COUNT=""
 MACHINE_TYPE=`uname -m`
 
-PHANTOMJS="$SCRIPT_HOME/phantomjs"
+PHANTOMJS="/usr/bin/phantomjs"
 PHANTOMJS_FLAGS="--ignore-ssl-errors=true"
 
 if (command -v dialog >/dev/null)
