@@ -11,3 +11,4 @@
 *.ipr
 *.iws
 /.project
+.ingress-ice.conf
