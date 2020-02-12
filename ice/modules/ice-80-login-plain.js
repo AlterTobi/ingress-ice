@@ -21,7 +21,7 @@
  * Fires plain login
  */
 function firePlainLogin() {
-  page.settings.userAgent = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3) Gecko/20090305 Firefox/3.1b3 GTB5';
+  page.settings.userAgent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36';
   page.open('https://intel.ingress.com/intel', function (status) {
 
     if (status !== 'success') {quit('unable to connect to remote server')}
@@ -45,49 +45,24 @@ function firePlainLogin() {
  */
 function login(l, p) {
   page.evaluate(function (l) {
-    document.getElementById('Email').value = l;
+    document.getElementById('identifierId').value = l;
   }, l);
   page.evaluate(function () {
-    document.querySelector("#next").click();
+    document.querySelector("#identifierNext").click();
   });
   window.setTimeout(function () {
     page.evaluate(function (p) {
-      document.getElementById('Passwd').value = p;
+    	document.getElementsByName('password')[0].value = p;
     }, p);
     page.evaluate(function () {
-      document.querySelector("#next").click();
+      document.querySelector("#passwordNext").click();
     });
+/**
     page.evaluate(function () {
-      document.getElementById('gaia_loginform').submit();
+      document.getElementById('profileIdentifier').click();
     });
+*/
     window.setTimeout(function () {
-      announce('Validating login credentials...');
-      if (page.url.substring(0,40) === 'https://accounts.google.com/ServiceLogin') {
-        quit('login failed: wrong email and/or password');
-      }
-
-      if (page.url.substring(0,40) === 'https://appengine.google.com/_ah/loginfo') {
-        announce('Accepting appEngine request...');
-        page.evaluate(function () {
-          document.getElementById('persist_checkbox').checked = true;
-          document.getElementsByTagName('form').submit();
-        });
-      }
-
-      if (page.url.substring(0,44) === 'https://accounts.google.com/signin/challenge') {
-        announce('Using two-step verification, please enter your code:');
-        twostep = system.stdin.readLine();
-      }
-
-      if (twostep) {
-        page.evaluate(function (code) {
-          document.getElementById('totpPin').value = code;
-        }, twostep);
-        page.evaluate(function () {
-          document.getElementById('submit').click();
-          document.getElementById('challenge').submit();
-        });
-      }
       window.setTimeout(afterPlainLogin, loginTimeout);
     }, loginTimeout)
   }, loginTimeout / 10);
